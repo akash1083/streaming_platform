@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Add Category</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f6f9;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .form-container {
+            background: #fff;
+            padding: 25px 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            width: 350px;
+        }
+
+        h2 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            transition: border-color 0.3s;
+        }
+
+        input[type="text"]:focus {
+            border-color: #007bff;
+            outline: none;
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            background: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        button:hover {
+            background: #0056b3;
+        }
+
+        .error {
+            color: red;
+            font-size: 14px;
+            margin-bottom: 10px;
+            display: none;
+        }
+
+        .success {
+            color: green;
+            font-size: 14px;
+            margin-top: 10px;
+            display: none;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+
+<div class="form-container">
+    <h2>Add Category</h2>
+    <form id="categoryForm" method="POST">
+        {% csrf_token %}
+        <div class="error" id="errorMsg">Please enter a category name.</div>
+        <input type="text" name="category_name" id="categoryName" placeholder="Category Name">
+        <button type="submit">Add Category</button>
+        <div class="success" id="successMsg">Category added successfully!</div>
+    </form>
+</div>
+
+<script>
+    const form = document.getElementById("categoryForm");
+    const categoryInput = document.getElementById("categoryName");
+    const errorMsg = document.getElementById("errorMsg");
+    const successMsg = document.getElementById("successMsg");
+
+    form.addEventListener("submit", function(event) {
+        event.preventDefault(); // prevent default form submission
+        const category = categoryInput.value.trim();
+
+        if (category === "") {
+            errorMsg.style.display = "block";
+            successMsg.style.display = "none";
+        } else {
+            errorMsg.style.display = "none";
+            successMsg.style.display = "block";
+
+            // Simulate form submission (you can remove this if using Django backend)
+            setTimeout(() => {
+                form.submit();
+            }, 1000);
+        }
+    });
+</script>
+
+</body>
+</html>

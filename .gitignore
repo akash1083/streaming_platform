@@ -1,0 +1,63 @@
+# ==========================
+# Python
+# ==========================
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual Environment
+.venv/
+venv/
+env/
+
+# Environment Variables
+.env
+
+# Django
+db.sqlite3
+*.sqlite3
+
+# Media Files
+media/
+
+# Static Files
+staticfiles/
+static/
+
+# Logs
+*.log
+
+# Migrations (Optional)
+# Uncomment if you don't want to push migrations
+# */migrations/
+# !*/migrations/__init__.py
+
+# IDEs
+.vscode/
+.idea/
+
+# OS Files
+.DS_Store
+Thumbs.db
+
+# Python Distribution
+build/
+dist/
+*.egg-info/
+
+# Coverage
+.coverage
+htmlcov/
+.pytest_cache/
+
+# mypy
+.mypy_cache/
+
+# PyCharm
+*.iml
+
+# VS Code Settings
+.history/
+
+# Node (if used)
+node_modules/

@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Manage Films</title>
+
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial,Helvetica,sans-serif;
+}
+
+body{
+    background:#f4f7fc;
+}
+
+/* Sidebar */
+
+.sidebar{
+    position:fixed;
+    top:0;
+    left:0;
+    width:250px;
+    height:100vh;
+    background:#111827;
+    color:white;
+}
+
+.sidebar h2{
+    text-align:center;
+    padding:20px 0;
+    color:#00d4ff;
+    border-bottom:1px solid #2d3748;
+}
+
+.sidebar a{
+    display:block;
+    color:white;
+    text-decoration:none;
+    padding:15px 25px;
+    transition:.3s;
+}
+
+.sidebar a:hover{
+    background:#1f2937;
+    color:#00d4ff;
+}
+
+/* Main */
+
+.main{
+    margin-left:250px;
+    padding:30px;
+}
+
+.header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:25px;
+}
+
+.header h1{
+    color:#333;
+}
+
+.back-btn{
+    background:#0d6efd;
+    color:white;
+    text-decoration:none;
+    padding:10px 18px;
+    border-radius:8px;
+}
+
+.back-btn:hover{
+    background:#0b5ed7;
+}
+
+/* Search */
+
+.search-box{
+    margin-bottom:20px;
+}
+
+.search-box input{
+    width:350px;
+    max-width:100%;
+    padding:12px;
+    border:1px solid #ccc;
+    border-radius:8px;
+    font-size:16px;
+}
+
+/* Table */
+
+.table-container{
+    background:white;
+    border-radius:12px;
+    overflow:hidden;
+    box-shadow:0 5px 15px rgba(0,0,0,.1);
+}
+
+table{
+    width:100%;
+    border-collapse:collapse;
+}
+
+thead{
+    background:#00bcd4;
+    color:white;
+}
+
+th,td{
+    padding:15px;
+    text-align:center;
+    border-bottom:1px solid #eee;
+}
+
+tbody tr:hover{
+    background:#f8f9fa;
+}
+
+img{
+    width:100px;
+    height:70px;
+    object-fit:cover;
+    border-radius:8px;
+}
+
+/* Buttons */
+
+.btn{
+    display:inline-block;
+    padding:8px 14px;
+    color:white;
+    text-decoration:none;
+    border-radius:6px;
+    margin:2px;
+}
+
+.edit{
+    background:#198754;
+}
+
+.edit:hover{
+    background:#157347;
+}
+
+.delete{
+    background:#dc3545;
+}
+
+.delete:hover{
+    background:#bb2d3b;
+}
+
+/* Empty */
+
+.empty{
+    text-align:center;
+    padding:50px;
+    font-size:22px;
+    color:#777;
+}
+
+/* Responsive */
+
+@media(max-width:768px){
+
+.sidebar{
+    position:relative;
+    width:100%;
+    height:auto;
+}
+
+.main{
+    margin-left:0;
+}
+
+.table-container{
+    overflow-x:auto;
+}
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="sidebar">
+
+<h2>🎬 ShortFilm Hub</h2>
+
+<a href="{% url 'admin_dashboard' %}">🏠 Dashboard</a>
+<a href="{% url 'add_category' %}">📂 Add Category</a>
+<a href="{% url 'upload_film' %}">⬆ Upload Film</a>
+<a href="{% url 'manage_films' %}">🎞 Manage Films</a>
+<a href="#">👥 Manage Users</a>
+<a href="{% url 'logout' %}">🚪 Logout</a>
+
+</div>
+
+<div class="main">
+
+<div class="header">
+
+<h1>🎞 Manage Films</h1>
+
+<a href="{% url 'admin_dashboard' %}" class="back-btn">
+⬅ Dashboard
+</a>
+
+</div>
+
+<div class="search-box">
+
+<input
+type="text"
+id="search"
+placeholder="Search film..."
+onkeyup="searchFilm()">
+
+</div>
+
+<div class="table-container">
+
+{% if films %}
+
+<table id="filmTable">
+
+<thead>
+
+<tr>
+
+<th>Thumbnail</th>
+<th>Title</th>
+<th>Category</th>
+<th>Duration</th>
+<th>Uploaded</th>
+<th>Actions</th>
+
+</tr>
+
+</thead>
+
+<tbody>
+
+{% for film in films %}
+
+<tr>
+
+<td>
+
+{% if film.thumbnail %}
+<img src="{{ film.thumbnail.url }}">
+{% else %}
+No Image
+{% endif %}
+
+</td>
+
+<td>{{ film.title }}</td>
+
+<td>{{ film.category.category_name }}</td>
+
+<td>{{ film.duration }}</td>
+
+<td>{{ film.uploaded_at|date:"d M Y" }}</td>
+
+<td>
+
+<a href="{% url 'edit_film' film.id %}" class="btn edit">
+✏ Edit
+</a>
+
+<a href="{% url 'delete_film' film.id %}"
+class="btn delete"
+onclick="return confirm('Delete this film?')">
+
+🗑 Delete
+
+</a>
+
+</td>
+
+</tr>
+
+{% endfor %}
+
+</tbody>
+
+</table>
+
+{% else %}
+
+<div class="empty">
+
+No Films Uploaded.
+
+</div>
+
+{% endif %}
+
+</div>
+
+</div>
+
+<script>
+
+function searchFilm(){
+
+let input=document.getElementById("search").value.toUpperCase();
+
+let table=document.getElementById("filmTable");
+
+let tr=table.getElementsByTagName("tr");
+
+for(let i=1;i<tr.length;i++){
+
+let td=tr[i].getElementsByTagName("td")[1];
+
+if(td){
+
+let txt=td.textContent||td.innerText;
+
+if(txt.toUpperCase().indexOf(input)>-1){
+
+tr[i].style.display="";
+
+}else{
+
+tr[i].style.display="none";
+
+}
+
+}
+
+}
+
+}
+
+</script>
+
+</body>
+</html>

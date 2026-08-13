@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Edit Film</title>
+
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial,Helvetica,sans-serif;
+}
+
+body{
+    background:#f4f7fc;
+}
+
+/* Sidebar */
+
+.sidebar{
+    position:fixed;
+    left:0;
+    top:0;
+    width:250px;
+    height:100vh;
+    background:#111827;
+}
+
+.sidebar h2{
+    color:#00d4ff;
+    text-align:center;
+    padding:20px;
+}
+
+.sidebar a{
+    display:block;
+    color:white;
+    text-decoration:none;
+    padding:15px 25px;
+    transition:.3s;
+}
+
+.sidebar a:hover{
+    background:#1f2937;
+}
+
+/* Main */
+
+.main{
+    margin-left:250px;
+    padding:40px;
+}
+
+.container{
+    background:white;
+    max-width:700px;
+    margin:auto;
+    padding:30px;
+    border-radius:12px;
+    box-shadow:0 5px 15px rgba(0,0,0,.15);
+}
+
+h1{
+    text-align:center;
+    margin-bottom:25px;
+    color:#333;
+}
+
+label{
+    display:block;
+    margin-top:15px;
+    margin-bottom:6px;
+    font-weight:bold;
+}
+
+input,
+textarea,
+select{
+    width:100%;
+    padding:12px;
+    border:1px solid #ccc;
+    border-radius:8px;
+    font-size:15px;
+}
+
+textarea{
+    resize:none;
+    height:120px;
+}
+
+img{
+    width:220px;
+    border-radius:10px;
+    margin-top:10px;
+}
+
+.buttons{
+    margin-top:25px;
+    display:flex;
+    gap:15px;
+}
+
+button,
+a{
+    flex:1;
+    text-align:center;
+    padding:12px;
+    border-radius:8px;
+    text-decoration:none;
+    color:white;
+    font-size:16px;
+}
+
+button{
+    background:#198754;
+    border:none;
+    cursor:pointer;
+}
+
+button:hover{
+    background:#157347;
+}
+
+.cancel{
+    background:#dc3545;
+}
+
+.cancel:hover{
+    background:#bb2d3b;
+}
+
+@media(max-width:768px){
+
+.sidebar{
+    position:relative;
+    width:100%;
+    height:auto;
+}
+
+.main{
+    margin-left:0;
+    padding:20px;
+}
+
+.buttons{
+    flex-direction:column;
+}
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="sidebar">
+
+<h2>🎬 ShortFilm Hub</h2>
+
+<a href="{% url 'admin_dashboard' %}">🏠 Dashboard</a>
+<a href="{% url 'manage_films' %}">🎞 Manage Films</a>
+<a href="{% url 'upload_film' %}">⬆ Upload Film</a>
+<a href="{% url 'add_category' %}">📂 Categories</a>
+<a href="{% url 'logout' %}">🚪 Logout</a>
+
+</div>
+
+<div class="main">
+
+<div class="container">
+
+<h1>Edit Film</h1>
+
+<form method="POST" enctype="multipart/form-data">
+
+{% csrf_token %}
+
+<label>Film Title</label>
+<input
+type="text"
+name="title"
+value="{{ film.title }}"
+required>
+
+<label>Description</label>
+<textarea
+name="description"
+required>{{ film.description }}</textarea>
+
+<label>Duration</label>
+<input
+type="text"
+name="duration"
+value="{{ film.duration }}"
+required>
+
+<label>Category</label>
+
+<select name="category">
+
+{% for category in categories %}
+
+<option
+value="{{ category.id }}"
+{% if category.id == film.category.id %}selected{% endif %}>
+
+{{ category.category_name }}
+
+</option>
+
+{% endfor %}
+
+</select>
+
+<label>YouTube Link</label>
+
+<input
+type="url"
+name="youtube_link"
+value="{{ film.youtube_link }}"
+required>
+
+<label>Current Thumbnail</label>
+
+{% if film.thumbnail %}
+<img src="{{ film.thumbnail.url }}">
+{% else %}
+<p>No Thumbnail</p>
+{% endif %}
+
+<label>New Thumbnail (Optional)</label>
+
+<input
+type="file"
+name="thumbnail">
+
+<div class="buttons">
+
+<button type="submit">
+💾 Update Film
+</button>
+
+<a
+href="{% url 'manage_films' %}"
+class="cancel">
+
+❌ Cancel
+
+</a>
+
+</div>
+
+</form>
+
+</div>
+
+</div>
+
+</body>
+</html>
