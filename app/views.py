@@ -262,3 +262,59 @@ def edit_film(request, id):
         "film": film,
         "categories": categories
     })
+
+def manage_users(request):
+    if "user_id" not in request.session:
+        return redirect("login")
+
+    if request.session.get("role") != "admin":
+        messages.error(request, "Access Denied")
+        return redirect("home")
+
+    users = Register.objects.all().order_by("id")
+
+    return render(request, "manage_users.html", {
+        "users": users
+    })
+
+
+def change_role(request, id):
+    if "user_id" not in request.session:
+        return redirect("login")
+
+    if request.session.get("role") != "admin":
+        return redirect("home")
+
+    user = get_object_or_404(Register, id=id)
+
+    if user.role == "user":
+        user.role = "admin"
+    else:
+        user.role = "user"
+
+    user.save()
+
+    messages.success(request, "User role updated successfully.")
+
+    return redirect("manage_users")
+
+
+def delete_user(request, id):
+    if "user_id" not in request.session:
+        return redirect("login")
+
+    if request.session.get("role") != "admin":
+        return redirect("home")
+
+    user = get_object_or_404(Register, id=id)
+
+    # Prevent admin from deleting themselves
+    if user.id == request.session["user_id"]:
+        messages.error(request, "You cannot delete your own account.")
+        return redirect("manage_users")
+
+    user.delete()
+
+    messages.success(request, "User deleted successfully.")
+
+    return redirect("manage_users")

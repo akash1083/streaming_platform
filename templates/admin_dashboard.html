@@ -159,7 +159,7 @@ body{
 
     <!-- Create these pages later -->
     <a href="{% url 'manage_films' %}">🎞 Manage Films</a>
-    <a href="#">👥 Manage Users</a>
+    <a href="{% url 'manage_users' %}">👥 Manage Users</a>
 
     <a href="{% url 'logout' %}">🚪 Logout</a>
 
@@ -218,7 +218,7 @@ body{
             Manage Films
         </a>
 
-        <a href="{% url 'manage_films' %}" class="action">
+        <a href="{% url 'manage_users' %}" class="action">
             👥<br><br>
             Manage Users
         </a>

@@ -20,6 +20,9 @@ urlpatterns = [
     path("manage_films/", views.manage_films, name="manage_films"),
     path("edit_film/<int:id>/", views.edit_film, name="edit_film"),
     path("delete_film/<int:id>/", views.delete_film, name="delete_film"),
+    path("manage_users/", views.manage_users, name="manage_users"),
+    path("change_role/<int:id>/", views.change_role, name="change_role"),
+    path("delete_user/<int:id>/", views.delete_user, name="delete_user"),
         ]
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
